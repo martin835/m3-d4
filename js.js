@@ -38,6 +38,20 @@ const fetchFilteredBooks = function (str) {
       });
     }
 
+    const fetchCart = function() {
+        fetch("https://striveschool-api.herokuapp.com/books", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            let itemsInCart = data.filter((item) => cart.includes(item.asin));
+            showCart(itemsInCart);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    }
+
 
 /*FETCH FUNCTIONS END  */
 
@@ -67,8 +81,9 @@ const addToCart = function(e) {
     let idOfTheClickedBook = e.target.id;
     cart.push(idOfTheClickedBook);
     console.log(cart);
-    e.target.style.backgroundColor = "red";
+    e.target.style.backgroundColor = "green";
     countBooksInCart();
+    
 }
 
 const countBooksInCart = function () {
@@ -88,6 +103,29 @@ const searchBooks = function (e) {
     } else {
         fetchBooksOnLoad();
     }
+}
+
+const showCart = function(arr) {
+    let modalBody = document.getElementById("modalbody");
+    modalBody.innerHTML = " ";
+    console.log(arr);
+    arr.forEach((item) => {
+      let newDiv= document.createElement("div");
+      newDiv.innerHTML = `<div class="card" style="width: 18rem;">
+                                <img src="${item.img}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.title}</h5>
+                                    <p class="card-text">${item.price} USD</p>
+                                    <a href="#" class="btn btn-secondary" onclick="removeBookFromCart(event)" >Remove</a>
+                                </div>
+                            </div>`;
+
+      modalBody.appendChild(newDiv);
+    });
+}
+
+const removeBookFromCart = function (e) {
+    console.log(e.target)
 }
 
 /* OTHER FUNCTIONS END */
