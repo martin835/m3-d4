@@ -46,6 +46,7 @@ const fetchCart = function() {
         .then((data) => {
         let itemsInCart = data.filter((item) => cart.includes(item.asin));
         showCart(itemsInCart);
+        countCartItemsWithReduce(cart);  //stupid function with arr.reduce() - replace with smth better
         })
         .catch((error) => {
         console.error("Error:", error);
@@ -94,6 +95,7 @@ const countBooksInCart = function () {
 const removeBook = function(e) {
     let colToHide = e.target.closest(".col")
     colToHide.classList.add("d-none");
+    e.preventDefault(); 
 }
 
 const searchBooks = function (e) {
@@ -126,12 +128,31 @@ const showCart = function(arr) {
 
 const removeBookFromCart = function (e) {
     let idBookToRemove =  e.target.id.slice(5);    
-    cart.splice(cart.indexOf(idBookToRemove),1);    
+    cart.splice(cart.indexOf(idBookToRemove),1);
+    countBooksInCart();
     fetchCart();
 }
 
 const countCartItemsWithReduce = function (arr) {
+    const cartHeader = document.getElementById("exampleModalLabel");
+    
+    let count = arr.reduce(
+        (previousValue, currentValue) => {
+            
+            if (typeof currentValue === "string") return previousValue += 1
+        }, 0
+    )
 
+    console.log(count);
+    cartHeader.innerText = `${count} books in the cart`;
+}
+
+const emptyCart = function () {
+    cart = [];
+    countCartItemsWithReduce(cart);
+    countBooksInCart();
+    let modalBody = document.getElementById("modalbody");
+    modalBody.innerHTML = "<span>Nothing in the cart </span><i class='bi bi-emoji-frown'></i>"; 
 }
 
 /* OTHER FUNCTIONS END */
