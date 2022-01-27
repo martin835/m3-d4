@@ -38,19 +38,19 @@ const fetchFilteredBooks = function (str) {
       });
     }
 
-    const fetchCart = function() {
-        fetch("https://striveschool-api.herokuapp.com/books", {
-          method: "GET",
+const fetchCart = function() {
+    fetch("https://striveschool-api.herokuapp.com/books", {
+        method: "GET",
+    })
+        .then((response) => response.json())
+        .then((data) => {
+        let itemsInCart = data.filter((item) => cart.includes(item.asin));
+        showCart(itemsInCart);
         })
-          .then((response) => response.json())
-          .then((data) => {
-            let itemsInCart = data.filter((item) => cart.includes(item.asin));
-            showCart(itemsInCart);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-    }
+        .catch((error) => {
+        console.error("Error:", error);
+        });
+}
 
 
 /*FETCH FUNCTIONS END  */
@@ -82,8 +82,8 @@ const addToCart = function(e) {
     cart.push(idOfTheClickedBook);
     console.log(cart);
     e.target.style.backgroundColor = "green";
-    countBooksInCart();
-    
+    e.preventDefault();
+    countBooksInCart();    
 }
 
 const countBooksInCart = function () {
@@ -128,6 +128,10 @@ const removeBookFromCart = function (e) {
     let idBookToRemove =  e.target.id.slice(5);    
     cart.splice(cart.indexOf(idBookToRemove),1);    
     fetchCart();
+}
+
+const countCartItemsWithReduce = function (arr) {
+
 }
 
 /* OTHER FUNCTIONS END */
