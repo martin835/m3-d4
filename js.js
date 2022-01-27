@@ -116,7 +116,7 @@ const showCart = function(arr) {
                                 <div class="card-body">
                                     <h5 class="card-title">${item.title}</h5>
                                     <p class="card-text">${item.price} USD</p>
-                                    <a href="#" class="btn btn-secondary" onclick="removeBookFromCart(event)" >Remove</a>
+                                    <a href="#" class="btn btn-secondary" id="cart-${item.asin}" onclick="removeBookFromCart(event)" >Remove</a>
                                 </div>
                             </div>`;
 
@@ -125,12 +125,15 @@ const showCart = function(arr) {
 }
 
 const removeBookFromCart = function (e) {
-    console.log(e.target)
+    let idBookToRemove =  e.target.id.slice(5);    
+    cart.splice(cart.indexOf(idBookToRemove),1);    
+    fetchCart();
 }
 
 /* OTHER FUNCTIONS END */
 
 /* EVENT LISTENERS */
+
 
 /* EVENT LISTENERS END */
 
